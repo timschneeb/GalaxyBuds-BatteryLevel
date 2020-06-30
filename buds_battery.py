@@ -49,7 +49,7 @@ def parse_message_wear_status(data):
 
 def main():
     parser = argparse.ArgumentParser(description='Read battery values of the Samsung Galaxy Buds (2019)')
-    parser.add_argument('mac', metavar='MAC-Address', type=str, nargs=1,
+    parser.add_argument('mac', metavar='mac-address', type=str, nargs=1,
                         help='MAC-Address of your Buds')
     parser.add_argument('-w', '--wearing-status', action='store_true', help="Print wearing status instead")
     parser.add_argument('-v', '--verbose', action='store_true', help="Print debug information")
