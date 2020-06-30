@@ -8,7 +8,7 @@ A python script to get battery level from Samsung Galaxy Buds devices
 # Author: @ThePBone
 # 06/30/2020
 
-from bluetooth import *
+import bluetooth
 import sys
 import argparse
 
@@ -60,7 +60,7 @@ def main():
     if verbose:
         print("Searching for the RFCOMM interface...")
     uuid = "00001102-0000-1000-8000-00805f9b34fd"
-    service_matches = find_service(uuid=uuid, address=str(args.mac[0]))
+    service_matches = bluetooth.find_service(uuid=uuid, address=str(args.mac[0]))
 
     if len(service_matches) == 0:
         print("Couldn't find the proprietary RFCOMM service")
@@ -71,7 +71,7 @@ def main():
 
     if verbose:
         print("RFCOMM interface found. Establishing connection...")
-    sock = BluetoothSocket(RFCOMM)
+    sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
     sock.connect((host, port))
 
     if verbose:
