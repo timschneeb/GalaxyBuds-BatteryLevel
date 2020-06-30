@@ -4,7 +4,7 @@
 A python script to get battery level from Samsung Galaxy Buds devices
 """
 
-# License: GPL-3.0
+# License: MIT
 # Author: @ThePBone
 # 06/30/2020
 
