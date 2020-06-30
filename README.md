@@ -15,3 +15,10 @@ optional arguments:
   -w, --wearing-status  Print wearing status instead
   -v, --verbose         Print debug information
 ```
+
+## Requirements
+
+You need to install PyBluez:
+```
+pip install PyBluez
+```
