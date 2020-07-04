@@ -1,5 +1,5 @@
 # GalaxyBuds-BatteryLevel
-Simple python script to read battery values and the current wearing status from the Samsung Galaxy Buds (2019)
+Simple python script to read battery values and the current wearing status from the Samsung Galaxy Buds and Buds+
 
 ## Requirements
 
@@ -14,12 +14,12 @@ pip install PyBluez
 
 ```
 ❯ python3 buds_battery.py -h
-usage: buds_battery.py [-h] [-w] [-v] MAC-Address
+usage: buds_battery.py [-h] [-w] [-v] mac-address
 
-Read battery values of the Samsung Galaxy Buds (2019)
+Read battery values of the Samsung Galaxy Buds or Buds+ [Left, Right, Case (Buds+)]
 
 positional arguments:
-  MAC-Address           MAC-Address of your Buds
+  mac-address           MAC-Address of your Buds
 
 optional arguments:
   -h, --help            show this help message and exit
