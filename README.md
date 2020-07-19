@@ -14,7 +14,7 @@ pip install PyBluez
 
 ```
 ❯ python buds_battery.py 80:7B:3E:21:79:EC --help
-usage: buds_battery.py [-h] [-m] [-w] [-v] mac-address
+usage: buds_battery.py [-h] [-m] [-t] [-w] [-v] mac-address
 
 Read battery values of the Samsung Galaxy Buds or Buds+ [Left, Right, Case (Buds+)]
 
@@ -24,6 +24,8 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -m, --monitor         Notify on change
+  -t, --monitor-timestamp
+                        Notify on change and print timestamps
   -w, --wearing-status  Print wearing status instead
   -v, --verbose         Print debug information
 ```
