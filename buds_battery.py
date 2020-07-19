@@ -11,12 +11,22 @@ A python script to get battery level from Samsung Galaxy Buds(+) devices
 import bluetooth
 import sys
 import argparse
+import datetime
 
 msg_debounce = ""
 
 
-def parse_message(data, isplus):
+def print_result(string, timestamp):
     global msg_debounce
+    if msg_debounce != string:
+        if timestamp:
+            print(string + "," + datetime.datetime.now().strftime("%FT%T.%f")[:-4] + "Z")
+        else:
+            print(string)
+        msg_debounce = string
+
+
+def parse_message(data, isplus, timestamp):
     if data[0] != (0xFD if isplus else 0xFE):
         print("Invalid SOM")
         exit(2)
@@ -32,15 +42,11 @@ def parse_message(data, isplus):
             string = "{},{}".format(data[5], data[6])
     else:
         return False
-
-    if msg_debounce != string:
-        print(string)
-        msg_debounce = string
-
+    print_result(string, timestamp)
     return True
 
 
-def parse_message_wear_status(data, isplus):
+def parse_message_wear_status(data, isplus, timestamp):
     global msg_debounce
     if data[0] != (0xFD if isplus else 0xFE):
         print("Invalid SOM")
@@ -68,10 +74,7 @@ def parse_message_wear_status(data, isplus):
         else:
             string = "Unknown"
 
-    if msg_debounce != string:
-        print(string)
-        msg_debounce = string
-
+    print_result(string, timestamp)
     return True
 
 
@@ -94,6 +97,7 @@ def main():
     parser.add_argument('mac', metavar='mac-address', type=str, nargs=1,
                         help='MAC-Address of your Buds')
     parser.add_argument('-m', '--monitor', action='store_true', help="Notify on change")
+    parser.add_argument('-t', '--monitor-timestamp', action='store_true', help="Notify on change and print timestamps")
     parser.add_argument('-w', '--wearing-status', action='store_true', help="Print wearing status instead")
     parser.add_argument('-v', '--verbose', action='store_true', help="Print debug information")
     args = parser.parse_args()
@@ -132,11 +136,11 @@ def main():
             if len(data) == 0:
                 break
             if args.wearing_status:
-                success = parse_message_wear_status(data, isplus)
+                success = parse_message_wear_status(data, isplus, args.monitor_timestamp)
             else:
-                success = parse_message(data, isplus)
+                success = parse_message(data, isplus, args.monitor_timestamp)
 
-            if success and not args.monitor:
+            if success and not args.monitor and not args.monitor_timestamp:
                 exit(0)
 
     except IOError:
