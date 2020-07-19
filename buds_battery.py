@@ -12,45 +12,67 @@ import bluetooth
 import sys
 import argparse
 
+msg_debounce = ""
+
 
 def parse_message(data, isplus):
+    global msg_debounce
     if data[0] != (0xFD if isplus else 0xFE):
         print("Invalid SOM")
         exit(2)
-    if data[3] != 97:
-        # Wrong message id
-        return
-
-    if isplus:
-        print("{},{},{}".format(data[6], data[7], data[11]))
+    if data[3] == 97:
+        if isplus:
+            string = "{},{},{}".format(data[6], data[7], data[11])
+        else:
+            string = "{},{}".format(data[6], data[7])
+    elif data[3] == 96:
+        if isplus:
+            string = "{},{},{}".format(data[5], data[6], data[10])
+        else:
+            string = "{},{}".format(data[5], data[6])
     else:
-        print("{},{}".format(data[6], data[7]))
-    exit()
+        return False
+
+    if msg_debounce != string:
+        print(string)
+        msg_debounce = string
+
+    return True
 
 
 def parse_message_wear_status(data, isplus):
+    global msg_debounce
     if data[0] != (0xFD if isplus else 0xFE):
         print("Invalid SOM")
         exit(2)
-    if data[3] != 97:
-        # Wrong message id
-        return
+    if data[3] == 97:
+        state = data[10]
+    elif data[3] == 96:
+        state = data[9]
+    else:
+        return False
 
-    state = data[10]
     if isplus:
         left = id_to_placement((state & 240) >> 4)
         right = id_to_placement(state & 15)
-        print("{},{}".format(left, right))
+        string = "{},{}".format(left, right)
     else:
         if state == 0:
-            print("None")
+            string = "None"
         elif state == 1:
-            print("Right")
+            string = "Right"
         elif state == 16:
-            print("Left")
+            string = "Left"
         elif state == 17:
-            print("Both")
-    exit()
+            string = "Both"
+        else:
+            string = "Unknown"
+
+    if msg_debounce != string:
+        print(string)
+        msg_debounce = string
+
+    return True
 
 
 def id_to_placement(id):
@@ -71,6 +93,7 @@ def main():
                                                  '[Left, Right, Case (Buds+)]')
     parser.add_argument('mac', metavar='mac-address', type=str, nargs=1,
                         help='MAC-Address of your Buds')
+    parser.add_argument('-m', '--monitor', action='store_true', help="Notify on change")
     parser.add_argument('-w', '--wearing-status', action='store_true', help="Print wearing status instead")
     parser.add_argument('-v', '--verbose', action='store_true', help="Print debug information")
     args = parser.parse_args()
@@ -109,9 +132,13 @@ def main():
             if len(data) == 0:
                 break
             if args.wearing_status:
-                parse_message_wear_status(data, isplus)
+                success = parse_message_wear_status(data, isplus)
             else:
-                parse_message(data, isplus)
+                success = parse_message(data, isplus)
+
+            if success and not args.monitor:
+                exit(0)
+
     except IOError:
         pass
 
