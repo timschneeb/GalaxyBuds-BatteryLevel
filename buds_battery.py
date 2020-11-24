@@ -111,7 +111,7 @@ def main():
         print(str(bluetooth.lookup_name(args.mac[0])))
 
     if verbose:
-        print("Searching for the RFCOMM interface...")
+        print("Searching for RFCOMM interface...")
     uuid = ("00001101-0000-1000-8000-00805F9B34FB" if isplus else "00001102-0000-1000-8000-00805f9b34fd")
     service_matches = bluetooth.find_service(uuid=uuid, address=str(args.mac[0]))
 
