@@ -9,6 +9,13 @@ You need to install PyBluez:
 ```
 pip install PyBluez
 ```
+## AUR
+
+You can find an installation package made by [@AriaMoradi](https://github.com/AriaMoradi) for Arch on the [AUR](https://aur.archlinux.org/packages/galaxybuds-batterylevel-git/):
+```
+yay -S galaxybuds-batterylevel
+```
+
 
 ## Showcase
 
