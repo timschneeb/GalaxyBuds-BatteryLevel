@@ -26,8 +26,8 @@ def print_result(string, timestamp):
         msg_debounce = string
 
 
-def parse_message(data, isplus, timestamp):
-    if data[0] != (0xFD if isplus else 0xFE):
+def parse_message(data, isplus, ispro, timestamp):
+    if data[0] != (0xFD if (isplus or ispro) else 0xFE):
         print("Invalid SOM")
         exit(2)
     if data[3] == 97:
@@ -46,9 +46,9 @@ def parse_message(data, isplus, timestamp):
     return True
 
 
-def parse_message_wear_status(data, isplus, timestamp):
+def parse_message_wear_status(data, isplus, ispro, timestamp):
     global msg_debounce
-    if data[0] != (0xFD if isplus else 0xFE):
+    if data[0] != (0xFD if (isplus or ispro) else 0xFE):
         print("Invalid SOM")
         exit(2)
     if data[3] == 97:
@@ -114,13 +114,19 @@ def main():
         print("Searching for RFCOMM interface...")
     uuid = ("00001101-0000-1000-8000-00805F9B34FB" if isplus else "00001102-0000-1000-8000-00805f9b34fd")
     service_matches = bluetooth.find_service(uuid=uuid, address=str(args.mac[0]))
-
+    
+    #I can't get bluetooth.lookup_name() to recognize buds pro so this is a quick work around that
+    ispro = service_matches[2]["name"] == "GEARMANAGER"
     if len(service_matches) == 0:
         print("Couldn't find the proprietary RFCOMM service")
         sys.exit(1)
-
-    port = service_matches[0]["port"]
-    host = service_matches[0]["host"]
+    if isplus:
+        port = service_matches[0]["port"]
+        host = service_matches[0]["host"]
+    elif ispro: 
+        #buds pro
+        port = service_matches[2]["port"] 
+        host = str(args.mac[0])
 
     if verbose:
         print("RFCOMM interface found. Establishing connection...")
@@ -136,9 +142,9 @@ def main():
             if len(data) == 0:
                 break
             if args.wearing_status:
-                success = parse_message_wear_status(data, isplus, args.monitor_timestamp)
+                success = parse_message_wear_status(data, isplus, ispro, args.monitor_timestamp)
             else:
-                success = parse_message(data, isplus, args.monitor_timestamp)
+                success = parse_message(data, isplus, ispro, args.monitor_timestamp)
 
             if success and not args.monitor and not args.monitor_timestamp:
                 exit(0)
