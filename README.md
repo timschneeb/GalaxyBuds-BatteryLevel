@@ -1,5 +1,5 @@
 # GalaxyBuds-BatteryLevel
-Simple python script to read battery values and the current wearing status from the Samsung Galaxy Buds and Buds+
+Simple python script to read battery values and the current wearing status from the Samsung Galaxy Buds, Buds+, Buds Live, and Buds Pro.
 
 ## Requirements
 
