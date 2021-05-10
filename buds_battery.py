@@ -117,7 +117,13 @@ def main():
 
     port = host = None
     for match in service_matches:
-        if match["name"] == b"GEARMANAGER":
+        target_name = ""
+        if isinstance(match["name"], str):
+            target_name = "GEARMANAGER"
+        else:
+            target_name = b"GEARMANAGER"
+
+        if match["name"] == target_name:
             port = match["port"]
             host = match["host"]
             break
