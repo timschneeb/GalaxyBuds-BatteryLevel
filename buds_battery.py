@@ -117,7 +117,7 @@ def main():
 
     port = host = None
     for match in service_matches:
-        if match["name"] == b"GEARMANAGER":
+        if match["name"] in (b"GEARMANAGER", "GEARMANAGER"):
             port = match["port"]
             host = match["host"]
             break
