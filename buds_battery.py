@@ -27,7 +27,7 @@ def print_result(string, timestamp):
 
 
 def parse_message(data, islegacy, timestamp):
-    if data[0] != (0xFE if islegacy else 0xFD ):
+    if data[0] != (0xFE if islegacy else 0xFD):
         print("Invalid SOM")
         exit(2)
     if data[3] == 97:
@@ -92,8 +92,9 @@ def id_to_placement(id):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Read battery values of the Samsung Galaxy Buds, Buds+, Buds Live or Buds Pro'
-                                                 '[Left, Right, Case (Buds+ or later)]')
+    parser = argparse.ArgumentParser(
+        description='Read battery values of the Samsung Galaxy Buds, Buds+, Buds Live or Buds Pro'
+                    '[Left, Right, Case (Buds+ or later)]')
     parser.add_argument('mac', metavar='mac-address', type=str, nargs=1,
                         help='MAC-Address of your Buds')
     parser.add_argument('-m', '--monitor', action='store_true', help="Notify on change")
