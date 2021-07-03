@@ -9,6 +9,13 @@ You need to install PyBluez:
 ```
 pip install PyBluez
 ```
+
+If your distro has no Bluetooth drivers installed, make sure to install the Bluez-related packages.
+On Debian/Ubuntu for example:
+```
+sudo apt install bluetooth python-bluez libbluetooth-dev
+```
+
 ## AUR
 
 You can find an installation package made by [@AriaMoradi](https://github.com/AriaMoradi) for Arch on the [AUR](https://aur.archlinux.org/packages/galaxybuds-batterylevel-git/):
