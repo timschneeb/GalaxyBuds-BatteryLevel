@@ -123,7 +123,7 @@ def main():
         else:
             target_name = b"GEARMANAGER"
 
-        if match["name"] == target_name:
+        if target_name in match["name"]:
             port = match["port"]
             host = match["host"]
             break
